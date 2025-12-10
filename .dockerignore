@@ -1,0 +1,55 @@
+# Зависимости
+node_modules
+npm-debug.log
+yarn-error.log
+bun.lockb
+
+# Сборка
+dist
+build
+*.tsbuildinfo
+
+# Тесты
+coverage
+.nyc_output
+test
+*.spec.ts
+*.e2e-spec.ts
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+
+# Логи
+logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Другое
+README.md
+.eslintrc*
+.prettierrc*
+.editorconfig
+docker-compose.yml
+Dockerfile
+.dockerignore
+
