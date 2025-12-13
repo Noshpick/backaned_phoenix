@@ -1,4 +1,4 @@
-FROM oven/bun:1.1-alpine AS dependencies
+FROM oven/bun:1.2-alpine AS dependencies
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ COPY package.json bun.lock* ./
 # Устанавливаем только production зависимости
 RUN bun install --frozen-lockfile --production
 
-FROM oven/bun:1.1-alpine AS build
+FROM oven/bun:1.2-alpine AS build
 
 WORKDIR /app
 
@@ -27,7 +27,7 @@ RUN bunx prisma generate
 # Собираем приложение
 RUN bun run build
 
-FROM oven/bun:1.1-alpine AS production
+FROM oven/bun:1.2-alpine AS production
 
 WORKDIR /app
 
