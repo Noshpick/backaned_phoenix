@@ -1,48 +1,52 @@
-FROM node:20-alpine AS dependencies
+FROM oven/bun:1.1-alpine AS dependencies
 
 WORKDIR /app
 
-COPY package*.json ./
-COPY bun.lock* ./
+COPY package.json bun.lock* ./
 
-RUN npm ci --only=production && \
-    npm cache clean --force
+# Устанавливаем только production зависимости
+RUN bun install --frozen-lockfile --production
 
-FROM node:20-alpine AS build
+FROM oven/bun:1.1-alpine AS build
 
 WORKDIR /app
 
-COPY package*.json ./
-COPY bun.lock* ./
+COPY package.json bun.lock* ./
 COPY tsconfig*.json ./
 COPY nest-cli.json ./
 
-RUN npm ci && \
-    npm cache clean --force
+# Устанавливаем все зависимости (включая dev для сборки)
+RUN bun install --frozen-lockfile
 
 COPY prisma ./prisma
 COPY src ./src
 
-RUN npx prisma generate
+# Генерируем Prisma клиент
+RUN bunx prisma generate
 
-RUN npm run build
+# Собираем приложение
+RUN bun run build
 
-FROM node:20-alpine AS production
+FROM oven/bun:1.1-alpine AS production
 
 WORKDIR /app
 
 RUN apk add --no-cache openssl
 
-RUN addgroup -g 1001 -S nodejs && \
+RUN addgroup -g 1001 -S bunjs && \
     adduser -S nestjs -u 1001
 
-COPY --from=dependencies --chown=nestjs:nodejs /app/node_modules ./node_modules
+# Копируем production зависимости
+COPY --from=dependencies --chown=nestjs:bunjs /app/node_modules ./node_modules
 
-COPY --from=build --chown=nestjs:nodejs /app/dist ./dist
-COPY --from=build --chown=nestjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=build --chown=nestjs:nodejs /app/prisma ./prisma
+# Копируем собранное приложение
+COPY --from=build --chown=nestjs:bunjs /app/dist ./dist
+# Копируем Prisma клиент
+COPY --from=build --chown=nestjs:bunjs /app/node_modules/.prisma ./node_modules/.prisma
+# Копируем Prisma схему для миграций
+COPY --from=build --chown=nestjs:bunjs /app/prisma ./prisma
 
-COPY --chown=nestjs:nodejs package*.json ./
+COPY --chown=nestjs:bunjs package.json bun.lock* ./
 
 USER nestjs
 
@@ -51,6 +55,6 @@ EXPOSE 3000
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Команда запуска
-CMD ["node", "dist/main.js"]
+# Запускаем приложение через Bun
+CMD ["bun", "dist/main.js"]
 
