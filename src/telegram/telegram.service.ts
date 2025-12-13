@@ -4,7 +4,7 @@ import { Context } from 'telegraf';
 import { ConfigService } from '@nestjs/config';
 import { BotService } from '../bot/bot.service';
 import axios from 'axios';
-import { S3Service } from 'src/files/s3.service';
+import { S3Service } from '../files/s3.service';
 import {
   Controller,
   Post,
@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { InjectBot } from 'nestjs-telegraf';
 import { Telegraf } from 'telegraf';
-import { OrderDto } from 'src/order/dto/order.dto';
+import { OrderDto } from '../order/dto/order.dto';
 
 type TgContext = Context & {
   message?: any;

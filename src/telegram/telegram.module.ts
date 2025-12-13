@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { BotHttpController, TelegramService } from './telegram.service';
 import { TelegramController } from './telegram.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { BotModule } from 'src/bot/bot.module';
+import { BotModule } from '../bot/bot.module';
 import { TelegrafModule } from 'nestjs-telegraf';
-import { FilesModule } from 'src/files/files.module';
+import { FilesModule } from '../files/files.module';
 
 @Module({
   imports: [
