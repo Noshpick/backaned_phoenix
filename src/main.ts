@@ -29,10 +29,6 @@ async function bootstrap() {
     }),
   );
 
-  // ВАЖНО: если включишь global prefix, то контроллер BotHttpController
-  // должен быть @Controller('bot'), а не @Controller('/api/bot')
-  // app.setGlobalPrefix('api');
-
   await app.listen(Number(process.env.PORT) || 3000);
 }
 
