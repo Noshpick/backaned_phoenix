@@ -488,7 +488,7 @@ export class TelegramService {
   }
 }
 
-@Controller('/api/bot')
+@Controller('bot')
 export class BotHttpController {
   constructor(
     @InjectBot() private readonly bot: Telegraf,

@@ -14,7 +14,7 @@ import { CreateNewsDto } from './dto/news.dto';
 import { BotService } from './bot.service';
 import { OrderDto } from '../order/dto/order.dto';
 
-@Controller('api/news')
+@Controller('news')
 export class BotController {
   orderService: any;
   constructor(private readonly newsService: BotService) {}
